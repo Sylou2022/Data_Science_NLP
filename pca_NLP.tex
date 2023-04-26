@@ -1,0 +1,55 @@
+pca = PCA(n_components=20)
+data = pca.fit_transform(df_tfidf)
+plt.plot(range(1, pca.n_components_+1), pca.explained_variance_ratio_, 'o-', linewidth=2, color='blue')
+plt.xlabel('Nombre de composantes')
+plt.ylabel('Variance expliquée')
+plt.show()
+...................................
+
+
+df_tfidf = pd.DataFrame(X.toarray(), columns=feature_names)
+
+# Effectuer le clustering avec KMeans
+kmeans = KMeans(n_clusters=3)
+clusters = kmeans.fit_predict(df_tfidf)
+
+# Réduire la dimensionnalité avec t-SNE
+tsne = TSNE(n_components=2, perplexity=50, random_state=42)
+X_tsne = tsne.fit_transform(df_tfidf)
+
+# Afficher le graphique des clusters
+plt.scatter(X_tsne[:, 0], X_tsne[:, 1], c=clusters)
+plt.show()
+
+...............................................
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Calculer la somme cumulée de la variance expliquée
+cumulative_variance = np.cumsum(pca.explained_variance_)
+
+# Tracer le graphique avec la somme cumulée de la variance expliquée
+plt.bar(range(1,len(pca.explained_variance_)+1), cumulative_variance)
+plt.xlabel('PCA Feature')
+plt.ylabel('Cumulative Explained Variance')
+plt.title('Cumulative Feature Explained Variance')
+plt.show()
+......................................................
+pour la boucle de tests des PCA:
+y=[]
+variances = []
+for n in range(2, 12):
+    pca = PCA(n_components=n)
+    X_pca = pca.fit_transform(X.toarray())
+
+    variances.append(pca.explained_variance_ratio_)
+    y.append(np.sum(pca.explained_variance_ratio_))
+........................................................
+pour le graphe où on estsensé avoir un coude:
+plt.figure(figsize=(10, 6))
+plt.plot(range(2, len(variances)+2), y, '-o', label="Génération ")
+plt.xlabel("génération")
+plt.ylabel("Variance expliquée")
+plt.legend()
+plt.show()
+print(pca.explained_variance_ratio_)

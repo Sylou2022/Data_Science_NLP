@@ -1,0 +1,30 @@
+# Récupérer les noms de fonctionnalités (mots-clés) et les scores TF-IDF associés
+
+feature_names=vectorizer.get_feature_names_out()
+tfidf_scores = tfidf_matrix.toarray()
+
+# Créer un objet DataFrame pour stocker les résultats
+df = pd.DataFrame(tfidf_scores, columns=feature_names)
+# Trier les scores TF-IDF pour trouver les mots les plus importants
+top_words = df.mean().sort_values(ascending=False)[:10]
+print("Les 10 mots les plus importants dans l'ensemble de documents sont:\n")
+print(top_words)
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+
+
+# Calculer la fréquence de chaque terme dans l'ensemble de documents
+term_freq = df.sum()
+
+# Créer le nuage de mots
+wc = WordCloud(width=800, height=400, max_words=100, background_color='white')
+wc.generate_from_frequencies(term_freq)
+
+# Afficher le nuage de mots
+plt.figure(figsize=(10, 8))
+plt.imshow(wc, interpolation='bilinear')
+plt.axis('off')
+plt.show()
